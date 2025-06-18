@@ -39,9 +39,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductDto update(Long id, ProductDto dto) {
         ProductEntity existProduct = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        existProduct.setProductCount(dto.getProductCount());
         existProduct.setProductName(dto.getProductName());
-        existProduct.setProductWeight(dto.getProductWeight());
         existProduct.setCompany(companyRepository.findById(dto.getCompanyId())
                 .orElseThrow(() -> new RuntimeException("Company not found")));
         return mapper.toDto(repository.save(existProduct));

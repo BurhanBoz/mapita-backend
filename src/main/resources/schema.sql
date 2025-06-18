@@ -1,4 +1,5 @@
 
+DROP TABLE IF EXISTS orders;
 DROP TABLE IF EXISTS product;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS company;
@@ -21,10 +22,22 @@ CREATE TABLE users (
 CREATE TABLE product (
     product_id BIGINT PRIMARY KEY AUTO_INCREMENT,
     product_name VARCHAR(255) NOT NULL,
-    product_count INT NOT NULL,
-    product_weight DECIMAL(10,2) NOT NULL,
     company_id BIGINT,
     FOREIGN KEY (company_id) REFERENCES company(company_id)
+);
+
+CREATE TABLE ORDERS (
+    order_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    order_count INT NOT NULL,
+    order_weight DECIMAL(10,2),
+    start_date TIMESTAMP NOT NULL,
+    end_date TIMESTAMP,
+    product_id BIGINT,
+    company_id BIGINT,
+    user_id BIGINT,
+    FOREIGN KEY (product_id) REFERENCES PRODUCT(product_id),
+    FOREIGN KEY (company_id) REFERENCES COMPANY(company_id),
+    FOREIGN KEY (user_id) REFERENCES USERS(user_id)
 );
 
 -- Insert sample company
@@ -35,5 +48,8 @@ INSERT INTO users (user_name, password, email, role_type, company_id)
 VALUES ('john_doe', 'password123', 'john@example.com', 'ADMIN', 1);
 
 -- Insert sample product (assuming company_id = 1)
-INSERT INTO product (product_name, product_count, product_weight, company_id)
-VALUES ('Sample Product', 10, 1.25, 1);
+INSERT INTO product (product_name, company_id)
+VALUES ('Sample Product', 1);
+
+INSERT INTO ORDERS (order_count, order_weight, start_date, end_date, product_id, company_id, user_id)
+VALUES (10, 5.5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, 1, 1);

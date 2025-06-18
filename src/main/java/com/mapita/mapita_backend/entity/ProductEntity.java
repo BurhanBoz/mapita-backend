@@ -21,10 +21,6 @@ public class ProductEntity {
 
     @Column(name = "product_name")
     private String productName;
-    @Column(name = "product_count")
-    private int productCount;
-    @Column(name = "product_weight")
-    private BigDecimal productWeight;
 
     @ManyToOne
     @JoinColumn(name = "company_id")
