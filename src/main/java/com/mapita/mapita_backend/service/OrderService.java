@@ -11,4 +11,6 @@ public interface OrderService {
     OrderDto get(Long id);
     List<OrderDto> getAll();
     void delete(Long id);
+
+    List<OrderDto> saveAll(List<OrderDto> orders);
 }

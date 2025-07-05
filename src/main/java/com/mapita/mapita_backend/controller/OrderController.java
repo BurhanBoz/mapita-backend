@@ -11,6 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/orders")
 @RequiredArgsConstructor
+//@CrossOrigin(origins = {"${frontend.domain}"}, maxAge = 3600)
 public class OrderController {
 
 
@@ -40,5 +41,10 @@ public class OrderController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         orderService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping(path = "/bulk-save")
+    public ResponseEntity<List<OrderDto>> saveAll(@RequestBody List<OrderDto> orders) {
+        return ResponseEntity.ok(orderService.saveAll(orders));
     }
 }

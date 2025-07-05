@@ -7,6 +7,7 @@ import com.mapita.mapita_backend.repository.CompanyRepository;
 import com.mapita.mapita_backend.repository.UserRepository;
 import com.mapita.mapita_backend.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,9 +23,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto save(UserDto dto) {
+        dto.setPassword(new BCryptPasswordEncoder().encode(dto.getPassword()));
         UserEntity user = userMapper.toEntity(dto);
-        user.setCompany(companyRepository.findById(dto.getCompanyId())
+        user.setCompany(companyRepository.findById(dto.getCompany().getCompanyId())
                 .orElseThrow(() -> new RuntimeException("Company not found")));
+
         return userMapper.toDto(userRepository.save(user));
     }
 
@@ -50,7 +53,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(dto.getPassword());
         user.setEmail(dto.getEmail());
         user.setRoleType(dto.getRoleType());
-        user.setCompany(companyRepository.findById(dto.getCompanyId())
+        user.setCompany(companyRepository.findById(dto.getCompany().getCompanyId())
                 .orElseThrow(() -> new RuntimeException("Company not found")));
         return userMapper.toDto(userRepository.save(user));
     }

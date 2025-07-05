@@ -14,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/company")
 @RequiredArgsConstructor
+//@CrossOrigin(origins = {"${frontend.domain}"}, maxAge = 3600)
 public class CompanyController {
 
     private final CompanyService companyService;

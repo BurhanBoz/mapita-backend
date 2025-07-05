@@ -26,7 +26,7 @@ public class UserEntity {
     @Column(name = "role_type")
     private String roleType;
 
-    @ManyToOne
-    @JoinColumn(name = "company_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "company_id", referencedColumnName = "company_id")
     private CompanyEntity company;
 }

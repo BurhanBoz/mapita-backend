@@ -22,7 +22,4 @@ public class ProductEntity {
     @Column(name = "product_name")
     private String productName;
 
-    @ManyToOne
-    @JoinColumn(name = "company_id")
-    private CompanyEntity company;
 }

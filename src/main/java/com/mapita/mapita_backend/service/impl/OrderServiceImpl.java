@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -62,5 +64,42 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void delete(Long id) {
         orderRepository.deleteById(id);
+    }
+
+    @Override
+    public List<OrderDto> saveAll(List<OrderDto> orders) {
+        List<OrderEntity> entities = orders.stream().map(dto -> {
+            OrderEntity entity = orderMapper.toEntity(dto);
+
+            // Resolve foreign key relationships
+            entity.setProduct(
+                    productRepository.findById(dto.getProductId())
+                            .orElseThrow(() -> new RuntimeException("Product not found: " + dto.getProductId()))
+            );
+
+            entity.setCompany(
+                    companyRepository.findById(dto.getCompanyId())
+                            .orElseThrow(() -> new RuntimeException("Company not found: " + dto.getCompanyId()))
+            );
+
+            entity.setUser(
+                    userRepository.findById(dto.getUserId())
+                            .orElseThrow(() -> new RuntimeException("User not found: " + dto.getUserId()))
+            );
+
+            // Set default dates if not provided
+            if (dto.getStartDate() == null) {
+                entity.setStartDate(LocalDate.now());
+            }
+
+            if (dto.getEndDate() == null) {
+                entity.setEndDate(LocalDate.now());
+            }
+
+            return entity;
+        }).toList();
+
+        List<OrderEntity> savedEntities = orderRepository.saveAll(entities);
+        return savedEntities.stream().map(orderMapper::toDto).toList();
     }
 }

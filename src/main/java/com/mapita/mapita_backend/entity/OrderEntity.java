@@ -5,9 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.cglib.core.Local;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "ORDERS")
@@ -23,16 +25,16 @@ public class OrderEntity {
     private Long orderId;
 
     @Column(name = "order_count")
-    private Integer orderCount;
+    private Long orderCount;
 
     @Column(name = "order_weight")
     private BigDecimal orderWeight;
 
     @Column(name = "start_date")
-    private Timestamp startDate;
+    private LocalDate startDate;
 
     @Column(name = "end_date")
-    private Timestamp endDate;
+    private LocalDate endDate;
 
     @ManyToOne
     @JoinColumn(name = "product_id")

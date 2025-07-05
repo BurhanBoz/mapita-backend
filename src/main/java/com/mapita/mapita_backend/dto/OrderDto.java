@@ -4,20 +4,26 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderDto {
+public class OrderDto implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     private Long orderId;
-    private Integer orderCount;
+    private Long orderCount;
     private BigDecimal orderWeight;
-    private Timestamp startDate;
-    private Timestamp endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private Long productId;
     private Long companyId;
     private Long userId;

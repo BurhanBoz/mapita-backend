@@ -11,6 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/product")
 @RequiredArgsConstructor
+@CrossOrigin(origins = {"${frontend.domain}"}, maxAge = 3600)
 public class ProductController {
 
     private final ProductService productService;

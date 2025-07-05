@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: mapita-backend
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/mapita
+    username: root
+    password: 1burhan234
+
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema.sql
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+server:
+  port: 8080
+
+jwt:
+  secretKey: 3rV7f9uS2gH9nL5kX2cN7dQ4aP1sM6tR
+frontend:
+  domain: "*"

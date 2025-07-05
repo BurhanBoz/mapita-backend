@@ -5,7 +5,7 @@ import com.mapita.mapita_backend.entity.OrderEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {CompanyMapper.class, ProductMapper.class, UserMapper.class})
 public interface OrderMapper {
 
     OrderDto toDto(OrderEntity entity);
