@@ -47,4 +47,14 @@ public class OrderController {
     public ResponseEntity<List<OrderDto>> saveAll(@RequestBody List<OrderDto> orders) {
         return ResponseEntity.ok(orderService.saveAll(orders));
     }
+
+    @GetMapping(path = "/user-orders/{id}")
+    public ResponseEntity<List<OrderDto>> getUserOrders(@PathVariable Long id) {
+        return ResponseEntity.ok(orderService.getUserOrders(id));
+    }
+
+    @PutMapping("/approve/{companyId}")
+    public ResponseEntity<Integer> approveTodayOrders(@PathVariable Long companyId) {
+        return ResponseEntity.ok(orderService.approveCompanyOrdersToday(companyId));
+    }
 }

@@ -35,6 +35,7 @@ public class AuthServiceImpl implements AuthService {
         response.put("companyName", userDto.getCompany().getCompanyName());
         response.put("companyId", userDto.getCompany().getCompanyId().toString());
         response.put("userId", userDto.getUserId().toString());
+        response.put("role", userDto.getRoleType());
         return response;
     }
 }

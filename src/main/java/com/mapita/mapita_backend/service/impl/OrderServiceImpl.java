@@ -8,6 +8,7 @@ import com.mapita.mapita_backend.repository.OrderRepository;
 import com.mapita.mapita_backend.repository.ProductRepository;
 import com.mapita.mapita_backend.repository.UserRepository;
 import com.mapita.mapita_backend.service.OrderService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,9 +31,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDto save(OrderDto dto) {
         OrderEntity entity = orderMapper.toEntity(dto);
-        entity.setProduct(productRepository.findById(dto.getProductId()).orElseThrow());
-        entity.setCompany(companyRepository.findById(dto.getCompanyId()).orElseThrow());
-        entity.setUser(userRepository.findById(dto.getUserId()).orElseThrow());
+        entity.setProduct(productRepository.findById(dto.getProduct().getProductId()).orElseThrow());
+        entity.setCompany(companyRepository.findById(dto.getCompany().getCompanyId()).orElseThrow());
+        entity.setUser(userRepository.findById(dto.getUser().getUserId()).orElseThrow());
         return orderMapper.toDto(orderRepository.save(entity));
     }
 
@@ -43,9 +44,9 @@ public class OrderServiceImpl implements OrderService {
         entity.setOrderWeight(dto.getOrderWeight());
         entity.setStartDate(dto.getStartDate());
         entity.setEndDate(dto.getEndDate());
-        entity.setProduct(productRepository.findById(dto.getProductId()).orElseThrow());
-        entity.setCompany(companyRepository.findById(dto.getCompanyId()).orElseThrow());
-        entity.setUser(userRepository.findById(dto.getUserId()).orElseThrow());
+        entity.setProduct(productRepository.findById(dto.getProduct().getProductId()).orElseThrow());
+        entity.setCompany(companyRepository.findById(dto.getCompany().getCompanyId()).orElseThrow());
+        entity.setUser(userRepository.findById(dto.getUser().getUserId()).orElseThrow());
         return orderMapper.toDto(orderRepository.save(entity));
     }
 
@@ -73,18 +74,18 @@ public class OrderServiceImpl implements OrderService {
 
             // Resolve foreign key relationships
             entity.setProduct(
-                    productRepository.findById(dto.getProductId())
-                            .orElseThrow(() -> new RuntimeException("Product not found: " + dto.getProductId()))
+                    productRepository.findById(dto.getProduct().getProductId())
+                            .orElseThrow(() -> new RuntimeException("Product not found: " + dto.getProduct().getProductId()))
             );
 
             entity.setCompany(
-                    companyRepository.findById(dto.getCompanyId())
-                            .orElseThrow(() -> new RuntimeException("Company not found: " + dto.getCompanyId()))
+                    companyRepository.findById(dto.getCompany().getCompanyId())
+                            .orElseThrow(() -> new RuntimeException("Company not found: " + dto.getCompany().getCompanyId()))
             );
 
             entity.setUser(
-                    userRepository.findById(dto.getUserId())
-                            .orElseThrow(() -> new RuntimeException("User not found: " + dto.getUserId()))
+                    userRepository.findById(dto.getUser().getUserId())
+                            .orElseThrow(() -> new RuntimeException("User not found: " + dto.getUser().getUserId()))
             );
 
             // Set default dates if not provided
@@ -93,7 +94,9 @@ public class OrderServiceImpl implements OrderService {
             }
 
             if (dto.getEndDate() == null) {
-                entity.setEndDate(LocalDate.now());
+                entity.setEndDate(LocalDate.now().plusDays(1));
+            } else {
+                entity.setEndDate(LocalDate.now().plusDays(1));
             }
 
             return entity;
@@ -101,5 +104,17 @@ public class OrderServiceImpl implements OrderService {
 
         List<OrderEntity> savedEntities = orderRepository.saveAll(entities);
         return savedEntities.stream().map(orderMapper::toDto).toList();
+    }
+
+    @Override
+    public List<OrderDto> getUserOrders(Long userId) {
+        List<OrderEntity> userOrdersEntity = orderRepository.findActiveOrdersByUserId(userId);
+        return userOrdersEntity.stream().map(orderMapper::toDto).toList();
+    }
+
+    @Override
+    @Transactional
+    public int approveCompanyOrdersToday(Long companyId) {
+        return orderRepository.approveTodayOrdersByCompany(companyId);
     }
 }

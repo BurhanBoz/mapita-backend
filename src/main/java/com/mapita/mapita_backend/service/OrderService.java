@@ -13,4 +13,7 @@ public interface OrderService {
     void delete(Long id);
 
     List<OrderDto> saveAll(List<OrderDto> orders);
+    List<OrderDto> getUserOrders(Long userId);
+
+    int approveCompanyOrdersToday(Long companyId);
 }

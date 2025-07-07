@@ -24,7 +24,8 @@ public class OrderDto implements Serializable {
     private BigDecimal orderWeight;
     private LocalDate startDate;
     private LocalDate endDate;
-    private Long productId;
-    private Long companyId;
-    private Long userId;
+    private ProductDto product;
+    private CompanyDto company;
+    private UserDto user;
+    private String status;
 }

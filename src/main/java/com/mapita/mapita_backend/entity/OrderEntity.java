@@ -47,4 +47,7 @@ public class OrderEntity {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity user;
+
+    @Column(name = "status")
+    private String status;
 }
